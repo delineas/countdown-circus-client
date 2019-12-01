@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contador</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div id="app">
+        <div class="container mx-auto text-center bg-gray-200 p-4 text-xl">
+            <div class="title">
+                <h1>{{title}}</h1>
+            </div>
+            <div class="days inline-block ">
+                {{days}} d
+            </div>
+            <div class="hours inline-block ">
+                {{hours}} h
+            </div>
+            <div class="minutes inline-block ">
+                {{minutes}} m
+            </div>
+            <div class="seconds inline-block ">
+                {{seconds}} s
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var app = new Vue({
+                el: '#app',
+                data: {
+                    date: Date.parse('2019-12-31'),
+                    now: new Date().getTime(),
+                    title: ''
+                },
+                computed: {
+                    seconds: function() {
+                        return Math.trunc(((this.date - this.now) / 1000) % 60);
+                    },
+                    minutes: function() {
+                        return Math.trunc(((this.date - this.now) / 1000 / 60) % 60);
+                    },
+                    hours: function() {
+                        return Math.trunc(((this.date - this.now) / 1000 / 60 / 60) % 24);
+                    },
+                    days: function() {
+                        return Math.trunc((this.date - this.now) / 1000 / 60 / 60 / 24);
+                    },
+                },
+                mounted() {
+                    axios.get('http://127.0.0.1:8081/api/countdowns/4')
+                    .then( (response) => {
+                        //console.log(response);
+                        return response.data;
+                    })
+                    .then( (data) => {
+                        console.log(data);
+                        console.log(data[0].date);
+                        this.date = Date.parse(data[0].date);
+                        this.title = data[0].title;
+                    }); 
+                    setInterval(() => {
+                        this.now = new Date();
+                    } 
+                    , 1000);
+                }
+            })
+    </script>
+</body>
+</html>
