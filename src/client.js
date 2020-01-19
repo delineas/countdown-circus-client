@@ -4,11 +4,14 @@ class ClientCountdown {
   static client;
   constructor() {
     this.client = axios.create({
-      baseURL: `http://127.0.0.1:8081/api/`
+      baseURL: `${process.env.VUE_APP_BACKEND_URL}/api/`
     });
   }
   getCountdown(id) {
     return this.client.get(`countdowns/${id}`);
+  }
+  sendCountdown(data) {
+    return this.client.post('countdowns', data);
   }
 }
 

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from "vue-router";
 import App from './App.vue'
 import CounterClock from "@/components/CounterClock.vue";
+import Home from "@/components/Home.vue"
 
 import "@/assets/css/tailwind.css";
 
@@ -12,6 +13,10 @@ const router = new VueRouter({
     {
       path: "/countdown/:id",
       component: CounterClock
+    },
+    {
+      path: "/",
+      component: Home
     }
   ],
   mode: "history"
