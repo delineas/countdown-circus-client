@@ -8,6 +8,9 @@ import "@/assets/css/tailwind.css";
 
 Vue.use(VueRouter);
 
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+
 const router = new VueRouter({
   routes: [
     {

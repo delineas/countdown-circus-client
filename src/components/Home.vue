@@ -22,17 +22,16 @@
         >
           {{ errors.title[0] }}
         </div>
+        <div
+          v-if="!$v.title.minLength"
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          El título debe tener más de {{$v.title.$params.minLength.min}}
+        </div>
       </div>
       <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="date">
-          Fecha
-        </label>
-        <input
-          class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="date"
-          type="date"
-          v-model="date"
-        />
+        <DateTimePicker v-model="date" @update="date = $event;"></DateTimePicker>
         <div
           v-if="errors.date"
           class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
@@ -55,15 +54,26 @@
 
 <script>
 import ClientCountdown from "@/client";
+import DateTimePicker from "@/components/DateTimePicker"
+import { minLength } from 'vuelidate/lib/validators'
+
 
 export default {
   name: "Home",
+  components: {
+    DateTimePicker
+  },
   data() {
     return {
       title: "",
       date: null,
       errors: []
     };
+  },
+  validations: {
+    title: {
+      minLength: minLength(3)
+    }
   },
   methods: {
     submitForm() {
@@ -79,7 +89,10 @@ export default {
         .then(response => {
           /* eslint-disable */
           console.log(response);
-          alert(`El contador creado es ${response.data.id}`)
+          //alert(`El contador creado es ${response.data.id}`)
+          this.$router.push({
+            path: `/countdown/${response.data.id}`
+          })
         })
         .catch(error => {
           /* eslint-disable */
